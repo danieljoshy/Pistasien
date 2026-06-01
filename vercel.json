@@ -1,0 +1,32 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/pistacien-frontend-second/pages/index.html"
+    },
+    {
+      "source": "/auth",
+      "destination": "/pistacien-frontend-second/pages/auth.html"
+    },
+    {
+      "source": "/mens",
+      "destination": "/pistacien-frontend-second/pages/mens.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/pistacien-frontend-second/pages/admin.html"
+    },
+    {
+      "source": "/css/:path*",
+      "destination": "/pistacien-frontend-second/css/:path*"
+    },
+    {
+      "source": "/js/:path*",
+      "destination": "/pistacien-frontend-second/js/:path*"
+    },
+    {
+      "source": "/assets/:path*",
+      "destination": "/pistacien-frontend-second/assets/:path*"
+    }
+  ]
+}
