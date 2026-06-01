@@ -1,0 +1,58 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  background-color: #1C1917; /* Dark luxury element */
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #FAFAF9;
+  /* Assuming Cormorant font is available in your root layout */
+  font-family: 'Cormorant', serif;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.brand {
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  margin: 0;
+  display: flex;
+}
+
+.char {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+  /* Slight padding resolves SVG/clipping artifacts on text when scaling/blurring */
+  padding: 0 1px;
+}
+
+.barWrap {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.bar {
+  width: 0%;
+  height: 100%;
+  background-color: #CA8A04; /* Gold */
+}
+
+.percentage {
+  /* Utilizing a contrasting sans-serif or sub font */
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  color: #78716C;
+  text-transform: uppercase;
+}

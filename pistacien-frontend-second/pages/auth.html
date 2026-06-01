@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pistasien - Authentication</title>
+  <meta name="description" content="Pistasien Clothing - Log in or create an account." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css?v=7" />
+</head>
+<body class="auth-body">
+
+  <div class="auth-page">
+    <div class="auth-card">
+
+      <!-- ═══ LEFT: Pistachio Gradient Panel ═══ -->
+      <div class="auth-card-left">
+
+        <!-- Decorative Rings -->
+        <div class="auth-deco" aria-hidden="true">
+          <div class="auth-deco-ring auth-deco-ring--1"></div>
+          <div class="auth-deco-ring auth-deco-ring--2"></div>
+          <div class="auth-deco-ring auth-deco-ring--3"></div>
+          <div class="auth-deco-dot auth-deco-dot--1"></div>
+          <div class="auth-deco-dot auth-deco-dot--2"></div>
+        </div>
+
+        <!-- Back to Home -->
+        <a href="/" class="auth-back-home" data-antigravity aria-label="Back to homepage">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back to Home
+        </a>
+
+        <!-- Brand -->
+        <div class="auth-brand">
+          <img src="../assets/images/logo.png" alt="Pistasien Logo" class="auth-brand-logo" />
+          <span class="auth-brand-name">Pistasien</span>
+        </div>
+
+        <!-- Main Heading -->
+        <div class="auth-left-content">
+          <h2 class="auth-left-heading">Discover<br>Your<br>Style.</h2>
+          <p class="auth-left-sub">Curated fashion for the modern wardrobe.</p>
+        </div>
+
+        <!-- Bottom Tagline -->
+        <p class="auth-left-tagline">Est. 2024 &middot; Pistasien Clothing</p>
+
+      </div><!-- /.auth-card-left -->
+
+      <!-- ═══ RIGHT: Cream Form Panel ═══ -->
+      <div class="auth-card-right">
+
+        <!-- Language Selector -->
+        <div class="auth-lang" role="button" aria-label="Language: English (USA)">
+          <span>English (USA)</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" aria-hidden="true">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </div>
+
+        <div class="auth-form-container">
+
+          <!-- Heading (updates per tab) -->
+          <header class="auth-header">
+            <h1 class="auth-title" id="auth-title">Sign In</h1>
+          </header>
+
+          <!-- Tab Switch -->
+          <div class="auth-tabs" role="tablist" aria-label="Authentication mode">
+            <button class="auth-tab active" data-tab="login" aria-selected="true" role="tab" aria-controls="pane-login">Log In</button>
+            <button class="auth-tab" data-tab="signup" aria-selected="false" role="tab" aria-controls="pane-signup">Sign Up</button>
+            <div class="auth-tab-slider" aria-hidden="true"></div>
+          </div>
+
+          <!-- Panes Wrapper -->
+          <div class="auth-panes-wrapper">
+
+            <!-- LOGIN PANE -->
+            <form class="auth-pane active" id="pane-login" novalidate aria-label="Login form">
+
+              <div class="auth-input-group">
+                <input
+                  type="email"
+                  id="login-email"
+                  class="auth-input"
+                  placeholder="Email Address"
+                  autocomplete="email"
+                  required
+                  aria-label="Email Address"
+                />
+              </div>
+
+              <div class="auth-input-group auth-input-group--pw">
+                <input
+                  type="password"
+                  id="login-password"
+                  class="auth-input"
+                  placeholder="Password"
+                  autocomplete="current-password"
+                  required
+                  aria-label="Password"
+                />
+                <button type="button" class="auth-pw-toggle" aria-label="Show password">
+                  <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="17" height="17" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                  <svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="17" height="17" aria-hidden="true" style="display:none">
+                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="auth-options">
+                <a href="#" class="auth-forgot">Forgot Password?</a>
+              </div>
+
+              <label class="auth-checkbox-label">
+                <input type="checkbox" class="auth-checkbox-input" aria-label="I agree to the terms of service and privacy policy" />
+                <span class="auth-checkbox-custom" aria-hidden="true"></span>
+                <span class="auth-checkbox-text">I agree to the <a href="#" class="auth-policy-link">terms of service</a> and <a href="#" class="auth-policy-link">privacy policy</a></span>
+              </label>
+
+              <button type="submit" class="auth-btn-primary">
+                <span class="btn-text">Sign In</span>
+                <span class="btn-fill" aria-hidden="true"></span>
+              </button>
+
+            </form><!-- /#pane-login -->
+
+            <!-- SIGNUP PANE -->
+            <form class="auth-pane" id="pane-signup" novalidate aria-label="Sign up form">
+
+              <div class="auth-input-group">
+                <input
+                  type="text"
+                  id="signup-name"
+                  class="auth-input"
+                  placeholder="Full Name"
+                  autocomplete="name"
+                  required
+                  aria-label="Full Name"
+                />
+              </div>
+
+              <div class="auth-input-group">
+                <input
+                  type="email"
+                  id="signup-email"
+                  class="auth-input"
+                  placeholder="Email Address"
+                  autocomplete="email"
+                  required
+                  aria-label="Email Address"
+                />
+              </div>
+
+              <div class="auth-input-group auth-input-group--pw">
+                <input
+                  type="password"
+                  id="signup-password"
+                  class="auth-input"
+                  placeholder="Password"
+                  autocomplete="new-password"
+                  required
+                  aria-label="Password"
+                />
+                <button type="button" class="auth-pw-toggle" aria-label="Show password">
+                  <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="17" height="17" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                  <svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="17" height="17" aria-hidden="true" style="display:none">
+                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                </button>
+              </div>
+
+              <label class="auth-checkbox-label">
+                <input type="checkbox" class="auth-checkbox-input" aria-label="I agree to the terms of service and privacy policy" />
+                <span class="auth-checkbox-custom" aria-hidden="true"></span>
+                <span class="auth-checkbox-text">I agree to the <a href="#" class="auth-policy-link">terms of service</a> and <a href="#" class="auth-policy-link">privacy policy</a></span>
+              </label>
+
+              <button type="submit" class="auth-btn-primary">
+                <span class="btn-text">Create Account</span>
+                <span class="btn-fill" aria-hidden="true"></span>
+              </button>
+
+            </form><!-- /#pane-signup -->
+
+          </div><!-- /.auth-panes-wrapper -->
+
+          <!-- Social Login Separator -->
+          <div class="auth-separator" aria-hidden="true"><span>Or continue with</span></div>
+
+          <!-- Social Buttons -->
+          <div class="auth-socials" role="group" aria-label="Sign in with a social account">
+
+            <!-- Google -->
+            <button type="button" class="auth-btn-social" aria-label="Continue with Google">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+            </button>
+
+            <!-- Facebook -->
+            <button type="button" class="auth-btn-social" aria-label="Continue with Facebook">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </button>
+
+            <!-- Instagram -->
+            <button type="button" class="auth-btn-social" aria-label="Continue with Instagram">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <defs>
+                  <radialGradient id="ig-g" r="150%" cx="30%" cy="107%">
+                    <stop offset="0%" stop-color="#fdf497"/>
+                    <stop offset="5%" stop-color="#fdf497"/>
+                    <stop offset="45%" stop-color="#fd5949"/>
+                    <stop offset="60%" stop-color="#d6249f"/>
+                    <stop offset="90%" stop-color="#285AEB"/>
+                  </radialGradient>
+                </defs>
+                <path fill="url(#ig-g)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162S8.597 18.163 12 18.163s6.162-2.759 6.162-6.162c0-3.403-2.759-6.162-6.162-6.162zM12 16c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </button>
+
+            <!-- X / Twitter -->
+            <button type="button" class="auth-btn-social" aria-label="Continue with X (Twitter)">
+              <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
+                <path fill="#000" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.741l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+            </button>
+
+            <!-- LinkedIn -->
+            <button type="button" class="auth-btn-social" aria-label="Continue with LinkedIn">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </button>
+
+          </div><!-- /.auth-socials -->
+
+          <!-- Account Switch Link -->
+          <p class="auth-switch" id="auth-switch-text">
+            Already have an account? <a href="#" class="auth-switch-link" data-tab="login">Sign In</a>
+          </p>
+
+        </div><!-- /.auth-form-container -->
+      </div><!-- /.auth-card-right -->
+
+    </div><!-- /.auth-card -->
+  </div><!-- /.auth-page -->
+
+  <!-- Custom Cursor -->
+  <div id="cur"></div>
+  <div id="cur-ring"></div>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- Auth JS -->
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <!-- Main JS (Cursor & Global Utils) -->
+  <script src="../js/main.js"></script>
+</body>
+</html>

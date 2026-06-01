@@ -1,0 +1,91 @@
+# ======================
+# DEPENDENCIES
+# ======================
+node_modules/
+jspm_packages/
+bower_components/
+
+# ======================
+# ENV FILES
+# ======================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ======================
+# LOGS
+# ======================
+*.log
+logs/
+*.log.*
+
+# ======================
+# BUILD / FRAMEWORK
+# ======================
+dist/
+build/
+out/
+.next/
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+.prettiercache
+
+# ======================
+# ANTIGRAVITY / AI
+# ======================
+.agent/
+
+# ======================
+# DEPLOYMENT
+# ======================
+.vercel/
+
+# ======================
+# EDITOR / OS
+# ======================
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ======================
+# PYTHON
+# ======================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+coverage.xml
+*.cover
+*.pyo
+.hypothesis/
+.pytest_cache/
+
+# ======================
+# TEMP
+# ======================
+tmp/
+temp/
+
+# ======================
+# OPTIONAL LARGE FILES
+# ======================
+# Add specific large files here as needed, e.g.:
+# downloads/*.zip
+# large-dataset.zip
+
+kombai/

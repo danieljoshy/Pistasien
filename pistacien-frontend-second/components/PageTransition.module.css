@@ -1,0 +1,9 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: #1C1917; /* Dark luxury brand tone */
+  z-index: 10000;
+  pointer-events: none; /* Let clicks pass unless actively animating */
+  transform: translateY(100%); /* Start hidden natively */
+  will-change: transform;
+}
