@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile - Pistasien Clothing</title>
+  <meta name="description" content="Manage your Pistasien profile and delivery preferences." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css?v=8" />
+  <link rel="icon" type="image/png" sizes="64x64" href="../assets/images/logo2.png">
+</head>
+
+<body class="storefront-page">
+  <div id="loader"><svg style="display:none;"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" /></filter></svg><div class="loader-noise"></div><div class="loader-glow"></div><div class="loader-inner"><div class="loader-brand" id="loader-brand">PISTASIEN</div><div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div><p class="loader-text" id="loader-text">Opening Profile...</p></div></div>
+  <div id="page-overlay"></div>
+  <nav id="navbar"><div class="nav-left-cluster" style="display:flex;align-items:center;gap:1.5rem;"><button class="nav-icon-btn" id="nav-flowing-btn" aria-label="Open Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M3 6h18M3 18h18" /></svg></button><a href="/" class="nav-logo" id="nav-logo-link"><img src="../assets/images/logo.png" alt="Pistasien" class="nav-logo-img" /></a></div><ul class="nav-links"><li><a href="/#collections">Collections</a></li><li><a href="/mens">Men</a></li><li><a href="/checkout">Checkout</a></li><li><a href="/orders">Orders</a></li></ul><div class="nav-actions"><button class="nav-icon-btn" aria-label="Cart" id="btn-cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 01-8 0" /></svg><span class="cart-badge">0</span></button></div></nav>
+
+  <main>
+    <section class="sf-page-hero">
+      <div class="container sf-profile-hero">
+        <div class="sf-avatar" data-profile-initials>PG</div>
+        <div>
+          <p class="section-eyebrow">Account Atelier</p>
+          <h1 class="section-title" data-profile-name>Pistasien Guest</h1>
+          <p class="sf-muted" data-profile-email>guest@pistasien.com</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sf-dashboard-layout container">
+      <aside class="sf-dashboard-rail reveal-section">
+        <a href="/profile" class="is-active">Profile</a>
+        <a href="/orders">Orders</a>
+        <a href="/checkout">Checkout</a>
+        <a href="/mens">Shop Men</a>
+      </aside>
+      <form id="profile-form" class="sf-form-panel reveal-section">
+        <div class="section-header sf-left-header">
+          <p class="section-eyebrow">Saved Details</p>
+          <h2 class="section-title">Profile & Delivery</h2>
+        </div>
+        <div class="sf-form-grid">
+          <label>Full Name<input name="name" required /></label>
+          <label>Email<input name="email" type="email" required /></label>
+          <label>Phone<input name="phone" /></label>
+          <label>Style Preference<input name="style" /></label>
+          <label class="sf-span-2">Address<input name="address" /></label>
+          <label>City<input name="city" /></label>
+          <label>Country<input name="country" /></label>
+          <label>Zip Code<input name="zipCode" /></label>
+        </div>
+        <div class="sf-form-actions">
+          <button type="submit" class="btn-primary">Save Profile</button>
+          <span id="profile-status" class="sf-status"></span>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="site-footer"><div class="footer-divider"></div><div class="footer-grid-wrap"><div class="container footer-grid"><div class="footer-col" data-footer-col><p class="footer-col-heading">Contact</p><ul class="footer-col-list"><li><a href="#" class="footer-link">About Us</a></li><li><a href="#" class="footer-link">Contact Us</a></li></ul></div><div class="footer-col" data-footer-col><p class="footer-col-heading">Account</p><ul class="footer-col-list"><li><a href="/profile" class="footer-link">Profile</a></li><li><a href="/orders" class="footer-link">Orders</a></li></ul></div><div class="footer-col" data-footer-col><p class="footer-col-heading">Collections</p><ul class="footer-col-list"><li><a href="/mens" class="footer-link">Men</a></li><li><a href="/" class="footer-link">Home</a></li></ul></div></div></div><div class="footer-wordmark-wrap" data-footer-wordmark><span class="footer-wordmark">PISTASIEN</span></div><div class="footer-legal"><span class="footer-legal-copy">&copy; 2026 PISTASIEN</span></div></footer>
+  <div id="cart-root" aria-live="polite" aria-hidden="true"><div class="cart-overlay" data-cart-close></div><aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title"><header class="cart-header"><h2 id="cart-title">Your Cart</h2><button type="button" class="cart-close-btn" data-cart-close aria-label="Close cart">&times;</button></header><div class="cart-body" data-lenis-prevent><ul id="cart-items" class="cart-items"></ul><p class="cart-empty">Your cart is empty.</p></div><footer class="cart-footer"><div class="cart-subtotal-row"><span>Grand Total</span><strong data-cart-subtotal>$0.00</strong></div><a href="/checkout" class="cart-btn cart-btn-secondary">Review Checkout</a><button type="button" class="cart-btn cart-btn-ghost" data-cart-close>Continue Shopping</button><a href="/checkout" class="cart-btn cart-btn-primary">Proceed to Checkout</a></footer></aside></div>
+  <div id="flowing-menu-overlay" class="flowing-menu-wrap"><button id="close-flowing-menu" class="nav-icon-btn" style="position:absolute;top:1.5rem;right:2.5rem;z-index:10000;color:var(--cream);" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12" /></svg></button><nav class="flowing-menu"><div class="flowing-menu__item" data-text="Home" data-image="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&q=80"><a class="flowing-menu__item-link" href="/">Home</a></div><div class="flowing-menu__item" data-text="Shop" data-image="https://images.unsplash.com/photo-1544441893-675973e31985?w=600&q=80"><a class="flowing-menu__item-link" href="/mens">Shop</a></div><div class="flowing-menu__item" data-text="Checkout" data-image="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80"><a class="flowing-menu__item-link" href="/checkout">Checkout</a></div><div class="flowing-menu__item" data-text="Orders" data-image="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80"><a class="flowing-menu__item-link" href="/orders">Orders</a></div></nav></div>
+  <div id="cur"></div><div id="cur-ring"></div>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lenis@1.1.5/dist/lenis.min.js"></script><script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script><script src="../js/api.js"></script><script src="../js/storefront.js?v=1"></script><script src="../js/main.js?v=8"></script>
+</body>
+
+</html>
