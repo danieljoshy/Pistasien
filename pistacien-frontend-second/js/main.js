@@ -6,9 +6,14 @@
 (() => {
   "use strict";
 
+  const hasGsap = () => typeof window.gsap !== "undefined";
+  const hasScrollTrigger = () => typeof window.ScrollTrigger !== "undefined";
+  const hasLenis = () => typeof window.Lenis !== "undefined";
+  const hasSplitType = () => typeof window.SplitType !== "undefined";
+
   /* ── 0. REGISTER GSAP PLUGINS ─────────────────── */
-  if (typeof ScrollTrigger !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
+  if (hasGsap() && hasScrollTrigger()) {
+    window.gsap.registerPlugin(window.ScrollTrigger);
   }
 
   /* ─────────────────────────────────────────────────
@@ -21,6 +26,11 @@
     const loaderTx = document.getElementById("loader-text");
 
     if (!loader || !brand) return;
+    if (!hasGsap()) {
+      loader.style.display = "none";
+      document.body.style.overflow = "";
+      return;
+    }
 
     // Manually split brand text
     const text = brand.textContent.trim();
@@ -96,18 +106,21 @@
   let globalLenis = null;
 
   function initLenis() {
-    const lenis = new Lenis({
+    if (!hasGsap() || !hasLenis()) return null;
+
+    const lenis = new window.Lenis({
       duration: 1.4,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smooth: true,
     });
 
-    lenis.on("scroll", ScrollTrigger.update);
+    if (hasScrollTrigger()) lenis.on("scroll", window.ScrollTrigger.update);
 
     gsap.ticker.add((time) => { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
 
     globalLenis = lenis;
+    window.lenis = lenis;
     return lenis;
   }
 
@@ -116,7 +129,16 @@
   ───────────────────────────────────────────────── */
   function initNavbar() {
     const nav = document.getElementById("navbar");
-    ScrollTrigger.create({
+    if (!nav) return;
+
+    if (!hasScrollTrigger()) {
+      const updateNav = () => nav.classList.toggle("scrolled", window.scrollY > 80);
+      window.addEventListener("scroll", updateNav, { passive: true });
+      updateNav();
+      return;
+    }
+
+    window.ScrollTrigger.create({
       start: "80px top",
       onEnter: () => nav.classList.add("scrolled"),
       onLeaveBack: () => nav.classList.remove("scrolled"),
@@ -128,6 +150,7 @@
   ───────────────────────────────────────────────── */
   function initHeroAnimation() {
     if (!document.getElementById("hero")) return;
+    if (!hasGsap()) return;
 
     /* Scale bg image 1.2→1 */
     gsap.to(".hero-bg-img", {
@@ -138,11 +161,11 @@
 
     /* Split title lines into chars */
     const titleLines = document.querySelectorAll(".hero-title .split-line");
-    const split = new SplitType(titleLines, { types: "chars" });
+    const split = hasSplitType() ? new window.SplitType(titleLines, { types: "chars" }) : null;
 
     const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
 
-    tl.from(split.chars, {
+    tl.from(split ? split.chars : titleLines, {
       yPercent: 110,
       opacity: 0,
       stagger: { amount: 0.8, from: "start" },
@@ -159,6 +182,14 @@
   ───────────────────────────────────────────────── */
   function initScrollReveals() {
     const reveals = document.querySelectorAll(".reveal-section");
+    if (!hasGsap() || !hasScrollTrigger()) {
+      reveals.forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+      return;
+    }
+
     reveals.forEach((el) => {
       gsap.to(el, {
         opacity: 1,
@@ -180,6 +211,7 @@
   function initMarquee() {
     const track = document.getElementById("marquee-track");
     if (!track) return;
+    if (!hasGsap()) return;
 
     gsap.fromTo(track,
       { xPercent: 0 },
@@ -196,6 +228,8 @@
      7. CATEGORY CARDS — GSAP hover timelines
   ───────────────────────────────────────────────── */
   function initCategoryCards() {
+    if (!hasGsap()) return;
+
     document.querySelectorAll(".cat-card").forEach((card) => {
       const img = card.querySelector(".cat-card-img");
       const overlay = card.querySelector(".cat-card-overlay");
@@ -217,6 +251,8 @@
      8. PRODUCT CARDS — 3D tilt + secondary image
   ───────────────────────────────────────────────── */
   function initProductCards() {
+    if (!hasGsap()) return;
+
     document.querySelectorAll(".prod-card").forEach((card) => {
       const wrap = card.querySelector(".prod-img-wrap");
       const img2 = card.querySelector(".prod-img-2");
@@ -257,6 +293,8 @@
     const wrapper = document.getElementById("h-scroll-wrapper");
     const track = document.getElementById("h-scroll-track");
     if (!wrapper || !track) return;
+    if (!hasGsap() || !hasScrollTrigger()) return;
+
     const cards = track.querySelectorAll(".trend-card");
 
     const totalScroll = track.scrollWidth - wrapper.offsetWidth;
@@ -283,6 +321,9 @@
      10. PARALLAX SECTION
   ───────────────────────────────────────────────── */
   function initParallax() {
+    if (!document.getElementById("parallax-bg")) return;
+    if (!hasGsap() || !hasScrollTrigger()) return;
+
     gsap.to("#parallax-bg", {
       yPercent: 25,
       ease: "none",
@@ -300,6 +341,7 @@
   ───────────────────────────────────────────────── */
   function initPageTransitions() {
     const overlay = document.getElementById("page-overlay");
+    if (!overlay || !hasGsap()) return;
 
     document.querySelectorAll('a[href]').forEach((link) => {
       const href = link.getAttribute("href");
@@ -351,7 +393,7 @@
     const cur = document.getElementById('cur');
     const ring = document.getElementById('cur-ring');
 
-    if (!cur || !ring) {
+    if (!cur || !ring || !hasGsap()) {
       if (cur) cur.style.display = 'none';
       if (ring) ring.style.display = 'none';
       const style = document.createElement('style');
@@ -580,6 +622,7 @@
 
       let animation = null;
       const setupMarquee = () => {
+        if (!hasGsap()) return;
         calculateRepetitions();
         const part = inner.querySelector('.flowing-marquee__part');
         if (!part) return;
@@ -599,6 +642,7 @@
       window.addEventListener("resize", () => setTimeout(setupMarquee, 100));
 
       link.addEventListener("mouseenter", (ev) => {
+        if (!hasGsap()) return;
         const rect = item.getBoundingClientRect();
         const x = ev.clientX - rect.left;
         const y = ev.clientY - rect.top;
@@ -611,6 +655,7 @@
       });
 
       link.addEventListener("mouseleave", (ev) => {
+        if (!hasGsap()) return;
         const rect = item.getBoundingClientRect();
         const x = ev.clientX - rect.left;
         const y = ev.clientY - rect.top;
@@ -679,6 +724,7 @@
       state.items.map((item) => ({ ...item }));
 
     const animateItemsIn = () => {
+      if (!hasGsap()) return;
       const nodes = itemsList.querySelectorAll(".cart-item");
       if (!nodes.length) return;
       gsap.fromTo(
@@ -689,6 +735,7 @@
     };
 
     const animateQtyUpdate = (itemId) => {
+      if (!hasGsap()) return;
       const row = itemsList.querySelector(`[data-id="${encodeURIComponent(itemId)}"]`);
       if (!row) return;
       gsap.fromTo(
@@ -742,6 +789,13 @@
       document.removeEventListener("keydown", onEsc);
       if (globalLenis) globalLenis.start();
 
+      if (!hasGsap()) {
+        root.classList.remove("is-open");
+        root.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("cart-open");
+        return;
+      }
+
       closeTl = gsap.timeline({
         defaults: { duration: 0.46, ease: "power3.out" },
         onComplete: () => {
@@ -768,6 +822,11 @@
 
       if (globalLenis) globalLenis.stop();
       document.addEventListener("keydown", onEsc);
+
+      if (!hasGsap()) {
+        return;
+      }
+
       openTl = gsap.timeline({ defaults: { ease: "power3.out" } });
       openTl
         .to(overlay, { autoAlpha: 1, duration: 0.4 }, 0)
@@ -881,8 +940,10 @@
       });
     });
 
-    gsap.set(panel, { xPercent: 100 });
-    gsap.set(overlay, { autoAlpha: 0 });
+    if (hasGsap()) {
+      gsap.set(panel, { xPercent: 100 });
+      gsap.set(overlay, { autoAlpha: 0 });
+    }
 
     window.CartStore = CartStore;
     render();
@@ -895,9 +956,22 @@
   function initFooterAnimation() {
     const footer = document.getElementById('site-footer');
     if (!footer) return;
+    const cols = footer.querySelectorAll('[data-footer-col]');
+    const wordmarkWrap = footer.querySelector('[data-footer-wordmark]');
+
+    if (!hasGsap() || !hasScrollTrigger()) {
+      cols.forEach((col) => {
+        col.style.opacity = "1";
+        col.style.transform = "none";
+      });
+      if (wordmarkWrap) {
+        wordmarkWrap.style.opacity = "1";
+        wordmarkWrap.style.transform = "none";
+      }
+      return;
+    }
 
     // Stagger fade-up for the 3 columns
-    const cols = footer.querySelectorAll('[data-footer-col]');
     if (cols.length) {
       gsap.to(cols, {
         opacity: 1,
@@ -914,7 +988,6 @@
     }
 
     // Wordmark reveal: clips up from below
-    const wordmarkWrap = footer.querySelector('[data-footer-wordmark]');
     if (wordmarkWrap) {
       gsap.to(wordmarkWrap, {
         opacity: 1,

@@ -9,7 +9,15 @@
       "destination": "/pistacien-frontend-second/pages/auth.html"
     },
     {
+      "source": "/auth.html",
+      "destination": "/pistacien-frontend-second/pages/auth.html"
+    },
+    {
       "source": "/mens",
+      "destination": "/pistacien-frontend-second/pages/mens.html"
+    },
+    {
+      "source": "/mens.html",
       "destination": "/pistacien-frontend-second/pages/mens.html"
     },
     {
