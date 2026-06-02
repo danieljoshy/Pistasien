@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Account - Pistasien Clothing</title>
+  <meta name="description" content="Manage your Pistasien account profile and view your past order history." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css?v=8" />
+  <link rel="icon" type="image/png" sizes="64x64" href="../assets/images/logo2.png">
+
+  <style>
+    .profile-section {
+      min-height: 85vh;
+      padding-top: 140px;
+      padding-bottom: 100px;
+    }
+
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+
+    @media (max-width: 992px) {
+      .profile-layout {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    .profile-sidebar {
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(26, 26, 20, 0.08);
+      border-radius: 16px;
+      padding: 2.5rem;
+    }
+
+    .profile-avatar-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .profile-avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 999px;
+      background: var(--pistachio-pale);
+      color: var(--pistachio);
+      font-size: 2.2rem;
+      font-family: var(--font-head);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      box-shadow: 0 8px 20px rgba(122, 158, 78, 0.12);
+    }
+
+    .profile-username {
+      font-family: var(--font-head);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .profile-user-email {
+      font-size: 0.82rem;
+      color: rgba(26, 26, 20, 0.5);
+      margin-top: 0.15rem;
+    }
+
+    .profile-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .profile-input-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .profile-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      color: rgba(26, 26, 20, 0.5);
+    }
+
+    .profile-input {
+      padding: 0.76rem 0.9rem;
+      border-radius: 8px;
+      border: 1px solid rgba(26, 26, 20, 0.18);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--ink);
+      transition: all 0.25s;
+    }
+
+    .profile-input:focus {
+      outline: none;
+      border-color: var(--pistachio);
+      box-shadow: 0 0 0 3px rgba(122, 158, 78, 0.12);
+    }
+
+    .profile-input:disabled {
+      background: rgba(26, 26, 20, 0.04);
+      color: rgba(26, 26, 20, 0.6);
+      border-color: rgba(26, 26, 20, 0.1);
+      cursor: not-allowed;
+    }
+
+    .profile-btn {
+      padding: 0.8rem 1.4rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.28s;
+      border: 1px solid transparent;
+    }
+
+    .profile-btn-primary {
+      background: var(--pistachio);
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(122, 158, 78, 0.18);
+    }
+
+    .profile-btn-primary:hover {
+      filter: brightness(1.06);
+    }
+
+    .profile-btn-logout {
+      background: transparent;
+      color: #b33939;
+      border-color: rgba(179, 57, 57, 0.25);
+      margin-top: 1rem;
+    }
+
+    .profile-btn-logout:hover {
+      background: rgba(179, 57, 57, 0.05);
+      border-color: #b33939;
+    }
+
+    /* History Timeline */
+    .history-card {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(26, 26, 20, 0.08);
+      border-radius: 16px;
+      padding: 2.5rem;
+    }
+
+    .history-title {
+      font-family: var(--font-head);
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      color: var(--ink);
+    }
+
+    .history-empty {
+      text-align: center;
+      padding: 3rem 0;
+      color: rgba(26, 26, 20, 0.5);
+    }
+
+    .order-card {
+      border: 1px solid rgba(26, 26, 20, 0.1);
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.6);
+      transition: box-shadow 0.3s;
+    }
+
+    .order-card:hover {
+      box-shadow: 0 8px 24px rgba(26, 26, 20, 0.04);
+    }
+
+    .order-header {
+      background: rgba(26, 26, 20, 0.03);
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      border-bottom: 1px solid rgba(26, 26, 20, 0.08);
+    }
+
+    .order-meta {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .order-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .order-meta-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(26, 26, 20, 0.5);
+    }
+
+    .order-meta-val {
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    .order-status {
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .status-pending { background: #f1f2f6; color: #57606f; }
+    .status-confirmed { background: #e3effd; color: #2f3542; }
+    .status-shipped { background: #fff2cc; color: #b8860b; }
+    .status-delivered { background: #e8f5e9; color: #2e7d32; }
+    .status-cancelled { background: #ffeacc; color: #c0392b; }
+
+    .order-body {
+      padding: 1.5rem;
+    }
+
+    .order-item-row {
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(26, 26, 20, 0.06);
+    }
+
+    .order-item-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .order-item-row:first-child {
+      padding-top: 0;
+    }
+
+    .order-item-img {
+      width: 50px;
+      height: 64px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(26, 26, 20, 0.08);
+      background: var(--cream);
+    }
+
+    .order-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .order-item-name {
+      font-family: var(--font-head);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .order-item-variant {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(26, 26, 20, 0.45);
+    }
+
+    .order-item-price-qty {
+      font-size: 0.84rem;
+      font-weight: 500;
+      text-align: right;
+    }
+
+    .order-address-box {
+      margin-top: 1.2rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(26, 26, 20, 0.1);
+      font-size: 0.8rem;
+      color: rgba(26, 26, 20, 0.65);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <svg style="display:none;">
+      <filter id="noiseFilter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
+      </filter>
+    </svg>
+    <div class="loader-noise"></div>
+    <div class="loader-glow"></div>
+    <div class="loader-inner">
+      <div class="loader-brand" id="loader-brand">PISTASIEN</div>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar" id="loader-bar"></div>
+      </div>
+      <p class="loader-text" id="loader-text">Loading Account...</p>
+    </div>
+  </div>
+
+  <div id="page-overlay"></div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="scrolled">
+    <div class="nav-left-cluster" style="display: flex; align-items: center; gap: 1.5rem;">
+      <button class="nav-icon-btn" id="nav-flowing-btn" aria-label="Open Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 12h18M3 6h18M3 18h18" />
+        </svg>
+      </button>
+      <a href="index.html" class="nav-logo" id="nav-logo-link">
+        <img src="../assets/images/logo.png" alt="Pistasien" class="nav-logo-img" />
+      </a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/#collections">Collections</a></li>
+      <li><a href="mens.html">Men</a></li>
+      <li><a href="/#featured">Featured</a></li>
+      <li><a href="/#products">Shop</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-icon-btn" aria-label="Search" id="btn-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35" />
+        </svg>
+      </button>
+      <button class="nav-icon-btn" aria-label="Cart" id="btn-cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 01-8 0" />
+        </svg>
+        <span class="cart-badge">0</span>
+      </button>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+      <span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="profile-section">
+    <div class="container">
+      <div class="section-header reveal-section">
+        <p class="section-eyebrow">User Dashboard</p>
+        <h1 class="section-title" style="font-family: var(--font-head); font-size: clamp(2.4rem, 5vw, 3rem);">My Account</h1>
+      </div>
+
+      <!-- Unauthorized / Redirect fallback -->
+      <div id="unauth-view" style="display: none; text-align: center; padding: 4rem 2rem;">
+        <h2 style="font-family: var(--font-head); font-size: 2rem; margin-bottom: 1rem;">Access Restricted</h2>
+        <p style="color: rgba(26,26,20,0.6); margin-bottom: 2rem;">Please sign in or create an account to view your dashboard profile details.</p>
+        <a href="auth.html" class="btn-primary" data-antigravity>Go to Sign In</a>
+      </div>
+
+      <div id="profile-dashboard" class="profile-layout" style="display: none;">
+        
+        <!-- Profile Panel (Left) -->
+        <aside class="profile-sidebar">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar" id="avatar-initials">U</div>
+            <h2 class="profile-username" id="sidebar-user-name">User Name</h2>
+            <p class="profile-user-email" id="sidebar-user-email">email@example.com</p>
+          </div>
+
+          <form id="profile-form" class="profile-form">
+            <div class="profile-input-wrap">
+              <label class="profile-label" for="profile-name">Full Name</label>
+              <input type="text" id="profile-name" class="profile-input" required />
+            </div>
+            <div class="profile-input-wrap">
+              <label class="profile-label" for="profile-phone">Phone Number</label>
+              <input type="tel" id="profile-phone" class="profile-input" placeholder="e.g. +1 555 123 4567" />
+            </div>
+            <div class="profile-input-wrap">
+              <label class="profile-label" for="profile-address">Street Address</label>
+              <input type="text" id="profile-address" class="profile-input" />
+            </div>
+            <div class="profile-input-wrap">
+              <label class="profile-label" for="profile-city">City</label>
+              <input type="text" id="profile-city" class="profile-input" />
+            </div>
+            <div class="profile-input-wrap">
+              <label class="profile-label" for="profile-country">Country</label>
+              <input type="text" id="profile-country" class="profile-input" />
+            </div>
+            <div class="profile-input-wrap">
+              <label class="profile-label" for="profile-zip">ZIP / Postal Code</label>
+              <input type="text" id="profile-zip" class="profile-input" />
+            </div>
+
+            <button type="submit" class="profile-btn profile-btn-primary" style="margin-top: 1rem;">Save Changes</button>
+          </form>
+
+          <button id="btn-profile-logout" type="button" class="profile-btn profile-btn-logout" style="width: 100%;">Sign Out</button>
+        </aside>
+
+        <!-- Order History (Right) -->
+        <section class="history-card">
+          <h2 class="history-title">Order History</h2>
+          <div id="orders-timeline">
+            <!-- Dynamic orders injected here -->
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- CART DRAWER -->
+  <div id="cart-root" aria-live="polite" aria-hidden="true">
+    <div class="cart-overlay" data-cart-close></div>
+    <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+      <header class="cart-header">
+        <h2 id="cart-title">Your Cart</h2>
+        <button type="button" class="cart-close-btn" data-cart-close aria-label="Close cart">&times;</button>
+      </header>
+      <div class="cart-body" data-lenis-prevent>
+        <ul id="cart-items" class="cart-items"></ul>
+        <p class="cart-empty">Your cart is empty.</p>
+      </div>
+      <footer class="cart-footer">
+        <div class="cart-subtotal-row">
+          <span>Grand Total</span>
+          <strong data-cart-subtotal>$0.00</strong>
+        </div>
+        <a href="cart.html" class="cart-btn cart-btn-secondary">View Full Cart</a>
+        <button type="button" class="cart-btn cart-btn-ghost" data-cart-close>Continue Shopping</button>
+        <a href="checkout.html" class="cart-btn cart-btn-primary">Proceed to Checkout</a>
+      </footer>
+    </aside>
+  </div>
+
+  <!-- CUSTOM CURSOR -->
+  <div id="cur"></div>
+  <div id="cur-ring"></div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.5/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/main.js?v=8"></script>
+  <script src="../js/profile.js?v=8"></script>
+</body>
+</html>

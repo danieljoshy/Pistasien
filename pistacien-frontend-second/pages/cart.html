@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart - Pistasien Clothing</title>
+  <meta name="description" content="Review your Pistasien shopping cart, adjust quantities, and proceed to checkout." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css?v=8" />
+  <link rel="icon" type="image/png" sizes="64x64" href="../assets/images/logo2.png">
+
+  <style>
+    .cart-page-section {
+      min-height: 80vh;
+      padding-top: 140px;
+      padding-bottom: 100px;
+    }
+    
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 3rem;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+
+    @media (max-width: 992px) {
+      .cart-layout {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+    }
+
+    .cart-table-card {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(26, 26, 20, 0.08);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    .cart-table-header {
+      display: grid;
+      grid-template-columns: 3fr 1fr 1fr 1fr;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(26, 26, 20, 0.1);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(26, 26, 20, 0.5);
+      font-weight: 600;
+    }
+
+    .cart-page-item {
+      display: grid;
+      grid-template-columns: 3fr 1fr 1fr 1fr;
+      align-items: center;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid rgba(26, 26, 20, 0.08);
+    }
+
+    .cart-page-item:last-child {
+      border-bottom: none;
+    }
+
+    .cart-page-item-info {
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .cart-page-item-img {
+      width: 80px;
+      height: 100px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: var(--cream);
+      border: 1px solid rgba(26, 26, 20, 0.08);
+    }
+
+    .cart-page-item-details {
+      min-width: 0;
+    }
+
+    .cart-page-item-name {
+      font-family: var(--font-head);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      color: var(--ink);
+    }
+
+    .cart-page-item-variant {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(26, 26, 20, 0.5);
+    }
+
+    .cart-page-item-price {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .cart-page-item-total {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--pistachio);
+    }
+
+    .cart-page-qty {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(26, 26, 20, 0.15);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.6);
+      overflow: hidden;
+    }
+
+    .cart-page-qty-btn {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      transition: background 0.2s ease;
+      cursor: pointer;
+    }
+
+    .cart-page-qty-btn:hover {
+      background: rgba(26, 26, 20, 0.06);
+    }
+
+    .cart-page-qty-val {
+      min-width: 24px;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .cart-page-remove-btn {
+      color: rgba(26, 26, 20, 0.4);
+      cursor: pointer;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-decoration: underline;
+      transition: color 0.2s ease;
+      display: inline-block;
+      margin-top: 0.4rem;
+    }
+
+    .cart-page-remove-btn:hover {
+      color: #b33939;
+    }
+
+    .cart-summary-card {
+      background: rgba(26, 26, 20, 0.03);
+      border: 1px solid rgba(26, 26, 20, 0.08);
+      border-radius: 16px;
+      padding: 2.2rem;
+      position: sticky;
+      top: 120px;
+    }
+
+    .cart-summary-title {
+      font-family: var(--font-head);
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(26, 26, 20, 0.1);
+      padding-bottom: 0.8rem;
+    }
+
+    .cart-summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: rgba(26, 26, 20, 0.7);
+    }
+
+    .cart-summary-row.total {
+      border-top: 1px solid rgba(26, 26, 20, 0.1);
+      padding-top: 1.2rem;
+      margin-top: 1.2rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .cart-summary-row.total strong {
+      font-family: var(--font-head);
+      font-size: 1.35rem;
+      color: var(--pistachio);
+    }
+
+    .cart-summary-btn {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+      display: inline-block;
+      transition: all 0.3s ease;
+      margin-top: 1.5rem;
+      cursor: pointer;
+    }
+
+    .cart-summary-btn-primary {
+      background: var(--pistachio);
+      color: #fff;
+      border: 1px solid var(--pistachio);
+      box-shadow: 0 8px 24px rgba(122, 158, 78, 0.22);
+    }
+
+    .cart-summary-btn-primary:hover {
+      filter: brightness(1.06);
+      transform: translateY(-2px);
+    }
+
+    .cart-summary-btn-secondary {
+      background: transparent;
+      color: rgba(26, 26, 20, 0.7);
+      border: 1px solid rgba(26, 26, 20, 0.2);
+      margin-top: 0.75rem;
+    }
+
+    .cart-summary-btn-secondary:hover {
+      border-color: var(--pistachio);
+      color: var(--pistachio);
+    }
+
+    .cart-page-empty {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .cart-page-empty-title {
+      font-family: var(--font-head);
+      font-size: 2.2rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .cart-page-empty-sub {
+      color: rgba(26, 26, 20, 0.6);
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 600px) {
+      .cart-table-header {
+        display: none;
+      }
+      .cart-page-item {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        position: relative;
+        padding: 1.5rem 0;
+      }
+      .cart-page-item-info {
+        grid-row: 1;
+      }
+      .cart-page-qty {
+        grid-row: 2;
+        width: fit-content;
+      }
+      .cart-page-item-price {
+        grid-row: 2;
+        text-align: right;
+      }
+      .cart-page-item-total {
+        grid-row: 3;
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <svg style="display:none;">
+      <filter id="noiseFilter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
+      </filter>
+    </svg>
+    <div class="loader-noise"></div>
+    <div class="loader-glow"></div>
+    <div class="loader-inner">
+      <div class="loader-brand" id="loader-brand">PISTASIEN</div>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar" id="loader-bar"></div>
+      </div>
+      <p class="loader-text" id="loader-text">Loading Your Cart...</p>
+    </div>
+  </div>
+
+  <div id="page-overlay"></div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="scrolled"> <!-- Force scrolled layout on cart page -->
+    <div class="nav-left-cluster" style="display: flex; align-items: center; gap: 1.5rem;">
+      <button class="nav-icon-btn" id="nav-flowing-btn" aria-label="Open Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 12h18M3 6h18M3 18h18" />
+        </svg>
+      </button>
+      <a href="index.html" class="nav-logo" id="nav-logo-link">
+        <img src="../assets/images/logo.png" alt="Pistasien" class="nav-logo-img" />
+      </a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/#collections">Collections</a></li>
+      <li><a href="mens.html">Men</a></li>
+      <li><a href="/#featured">Featured</a></li>
+      <li><a href="/#products">Shop</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-icon-btn" aria-label="Search" id="btn-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35" />
+        </svg>
+      </button>
+      <button class="nav-icon-btn" aria-label="Cart" id="btn-cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 01-8 0" />
+        </svg>
+        <span class="cart-badge">0</span>
+      </button>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+      <span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="cart-page-section">
+    <div class="container">
+      <div class="section-header reveal-section">
+        <p class="section-eyebrow">Your Selection</p>
+        <h1 class="section-title" style="font-family: var(--font-head); font-size: clamp(2.4rem, 5vw, 3rem);">Shopping Cart</h1>
+      </div>
+
+      <!-- Live Cart Container -->
+      <div id="cart-container" class="cart-layout" style="display: none;">
+        <!-- Cart Table (Left) -->
+        <div class="cart-table-card">
+          <div class="cart-table-header">
+            <div>Product</div>
+            <div>Price</div>
+            <div>Quantity</div>
+            <div style="text-align: right;">Total</div>
+          </div>
+          <div id="cart-page-items">
+            <!-- Dynamic rows injected here -->
+          </div>
+        </div>
+
+        <!-- Summary (Right) -->
+        <div class="cart-summary-card">
+          <h2 class="cart-summary-title">Summary</h2>
+          <div class="cart-summary-row">
+            <span>Subtotal</span>
+            <span id="summary-subtotal">$0.00</span>
+          </div>
+          <div class="cart-summary-row">
+            <span>Shipping</span>
+            <span id="summary-shipping">Calculated next</span>
+          </div>
+          <div class="cart-summary-row">
+            <span>Estimated Taxes</span>
+            <span id="summary-tax">$0.00</span>
+          </div>
+          <div class="cart-summary-row total">
+            <span>Grand Total</span>
+            <strong id="summary-total">$0.00</strong>
+          </div>
+          <a href="checkout.html" class="cart-summary-btn cart-summary-btn-primary" data-antigravity>Proceed to Checkout</a>
+          <a href="mens.html" class="cart-summary-btn cart-summary-btn-secondary" data-antigravity>Continue Shopping</a>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="cart-empty-state" class="cart-page-empty" style="display: none;">
+        <h2 class="cart-page-empty-title">Your wardrobe is empty</h2>
+        <p class="cart-page-empty-sub">Explore Pistasien’s curated collection of tailored essentials and find your story.</p>
+        <a href="mens.html" class="btn-primary" style="display: inline-block;" data-antigravity>Explore Men's Collection &rarr;</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- CART DRAWER -->
+  <div id="cart-root" aria-live="polite" aria-hidden="true">
+    <div class="cart-overlay" data-cart-close></div>
+    <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+      <header class="cart-header">
+        <h2 id="cart-title">Your Cart</h2>
+        <button type="button" class="cart-close-btn" data-cart-close aria-label="Close cart">&times;</button>
+      </header>
+      <div class="cart-body" data-lenis-prevent>
+        <ul id="cart-items" class="cart-items"></ul>
+        <p class="cart-empty">Your cart is empty.</p>
+      </div>
+      <footer class="cart-footer">
+        <div class="cart-subtotal-row">
+          <span>Grand Total</span>
+          <strong data-cart-subtotal>$0.00</strong>
+        </div>
+        <a href="cart.html" class="cart-btn cart-btn-secondary">View Full Cart</a>
+        <button type="button" class="cart-btn cart-btn-ghost" data-cart-close>Continue Shopping</button>
+        <a href="checkout.html" class="cart-btn cart-btn-primary">Proceed to Checkout</a>
+      </footer>
+    </aside>
+  </div>
+
+  <!-- FLOWING MENU OVERLAY -->
+  <div id="flowing-menu-overlay" class="flowing-menu-wrap">
+    <button id="close-flowing-menu" class="nav-icon-btn" style="position: absolute; top: 1.5rem; right: 2.5rem; z-index: 10000; color: var(--cream);" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M18 6L6 18M6 6l12 12" />
+      </svg>
+    </button>
+    <nav class="flowing-menu">
+      <div class="flowing-menu__item" data-text="Home" data-image="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&q=80">
+        <a class="flowing-menu__item-link" href="index.html">Home</a>
+      </div>
+      <div class="flowing-menu__item" data-text="Login" data-image="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80">
+        <a class="flowing-menu__item-link" href="auth.html">Login</a>
+      </div>
+      <div class="flowing-menu__item" data-text="Profile" data-image="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80">
+        <a class="flowing-menu__item-link" href="profile.html">Profile</a>
+      </div>
+      <div class="flowing-menu__item" data-text="About" data-image="https://images.unsplash.com/photo-1490114538077-0a7f8cb49891?w=600&q=80">
+        <a class="flowing-menu__item-link" href="#">About</a>
+      </div>
+      <div class="flowing-menu__item" data-text="Help" data-image="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80">
+        <a class="flowing-menu__item-link" href="#">Help</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- CUSTOM CURSOR -->
+  <div id="cur"></div>
+  <div id="cur-ring"></div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.5/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/main.js?v=8"></script>
+  <script src="../js/cartPage.js?v=8"></script>
+</body>
+</html>
