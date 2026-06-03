@@ -760,6 +760,7 @@
 
     const state = { items: [] };
     const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+    const cartStorageKey = "pistasien_cart_v1";
     let isOpen = false;
     let openTl = null;
     let closeTl = null;
@@ -794,6 +795,19 @@
 
     const cloneItems = () =>
       state.items.map((item) => ({ ...item }));
+
+    const loadStoredCart = () => {
+      try {
+        const stored = JSON.parse(localStorage.getItem(cartStorageKey) || "[]");
+        return Array.isArray(stored) ? stored.map(normalizeItem) : [];
+      } catch (_err) {
+        return [];
+      }
+    };
+
+    const persistCart = () => {
+      localStorage.setItem(cartStorageKey, JSON.stringify(cloneItems()));
+    };
 
     const animateItemsIn = () => {
       if (!hasGsap()) return;
@@ -930,6 +944,7 @@
         } else {
           state.items.push(incoming);
         }
+        persistCart();
         render();
         animateQtyUpdate(incoming.id);
         if (window.apiSyncCart) window.apiSyncCart(state.items);
@@ -938,6 +953,7 @@
       remove(id) {
         const key = String(id);
         state.items = state.items.filter((item) => item.id !== key);
+        persistCart();
         render();
         if (window.apiSyncCart) window.apiSyncCart(state.items);
         return cloneItems();
@@ -951,6 +967,7 @@
           return CartStore.remove(key);
         }
         existing.qty = nextQty;
+        persistCart();
         render();
         animateQtyUpdate(key);
         if (window.apiSyncCart) window.apiSyncCart(state.items);
@@ -958,6 +975,7 @@
       },
       clear() {
         state.items = [];
+        persistCart();
         render();
         if (window.apiSyncCart) window.apiSyncCart(state.items);
         return cloneItems();
@@ -1019,40 +1037,63 @@
       });
     });
 
+    document.querySelectorAll(".prod-card[data-pid]").forEach((card) => {
+      const id = card.dataset.pid;
+      if (!id) return;
+      card.setAttribute("role", "link");
+      card.setAttribute("tabindex", "0");
+      card.addEventListener("click", (e) => {
+        if (e.target.closest("a, button, input, select, textarea")) return;
+        window.location.href = `/product?id=${encodeURIComponent(id)}`;
+      });
+      card.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        window.location.href = `/product?id=${encodeURIComponent(id)}`;
+      });
+    });
+
     if (hasGsap()) {
       gsap.set(panel, { xPercent: 100 });
       gsap.set(overlay, { autoAlpha: 0 });
     }
 
-    window.CartStore = CartStore;
+   window.CartStore = CartStore;
 
-    // Asynchronously load cart from backend if available
-    if (window.apiFetchCart) {
-      window.apiFetchCart()
-        .then((res) => {
-          if (res && res.success && res.data && res.data.items) {
-            state.items = res.data.items.map((item) => ({
-              id: String(item.product.id),
-              name: String(item.product.name),
-              variant: String(item.size || "Standard"),
-              image: String(item.product.images[0] || "../assets/images/logo.png"),
-              qty: Number(item.quantity) || 1,
-              price: Number(item.product.price) || 0,
-            }));
-            render();
-            console.log(`[Cart] Loaded ${state.items.length} items from backend.`);
-          } else {
-            render();
-          }
-        })
-        .catch((err) => {
-          console.log("[Cart] Unauthenticated or failed to restore cart, starting empty.", err.message);
-          render();
-        });
-    } else {
+// Load cart from backend if available, otherwise fall back to localStorage
+if (window.apiFetchCart) {
+  window.apiFetchCart()
+    .then((res) => {
+      if (res && res.success && res.data && res.data.items) {
+        state.items = res.data.items.map((item) => ({
+          id: String(item.product.id),
+          name: String(item.product.name),
+          variant: String(item.size || "Standard"),
+          image: String(item.product.images?.[0] || "../assets/images/logo.png"),
+          qty: Number(item.quantity) || 1,
+          price: Number(item.product.price) || 0,
+        }));
+
+        console.log(`[Cart] Loaded ${state.items.length} items from backend.`);
+        render();
+      } else {
+        state.items = loadStoredCart();
+        render();
+      }
+    })
+    .catch((err) => {
+      console.log(
+        "[Cart] Unauthenticated or failed to restore cart, using localStorage fallback.",
+        err?.message || err
+      );
+
+      state.items = loadStoredCart();
       render();
-    }
-  }
+    });
+} else {
+  state.items = loadStoredCart();
+  render();
+}
 
 
   /* ─────────────────────────────────────────────────

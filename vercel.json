@@ -21,6 +21,46 @@
       "destination": "/pistacien-frontend-second/pages/mens.html"
     },
     {
+      "source": "/profile",
+      "destination": "/pistacien-frontend-second/pages/profile.html"
+    },
+    {
+      "source": "/profile.html",
+      "destination": "/pistacien-frontend-second/pages/profile.html"
+    },
+    {
+      "source": "/product",
+      "destination": "/pistacien-frontend-second/pages/product.html"
+    },
+    {
+      "source": "/product.html",
+      "destination": "/pistacien-frontend-second/pages/product.html"
+    },
+    {
+      "source": "/checkout",
+      "destination": "/pistacien-frontend-second/pages/checkout.html"
+    },
+    {
+      "source": "/checkout.html",
+      "destination": "/pistacien-frontend-second/pages/checkout.html"
+    },
+    {
+      "source": "/orders",
+      "destination": "/pistacien-frontend-second/pages/orders.html"
+    },
+    {
+      "source": "/orders.html",
+      "destination": "/pistacien-frontend-second/pages/orders.html"
+    },
+    {
+      "source": "/order",
+      "destination": "/pistacien-frontend-second/pages/orders.html"
+    },
+    {
+      "source": "/order.html",
+      "destination": "/pistacien-frontend-second/pages/orders.html"
+    },
+    {
       "source": "/admin",
       "destination": "/pistacien-frontend-second/pages/admin.html"
     },
