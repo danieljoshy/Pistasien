@@ -1,116 +1,7 @@
 (() => {
   "use strict";
 
-  const ADMIN_PRODUCTS = [
-    {
-      id: "prd-1001",
-      name: "Double-Breasted Wool Coat",
-      category: "Coats",
-      price: 890,
-      stock: 18,
-      status: "Active",
-      image: "https://images.unsplash.com/photo-1544441893-675973e31985?w=180&q=80",
-    },
-    {
-      id: "prd-1002",
-      name: "Classic Silk Shirt",
-      category: "Shirts",
-      price: 240,
-      stock: 42,
-      status: "Active",
-      image: "https://images.unsplash.com/photo-1596392927852-2a42166c40e1?w=180&q=80",
-    },
-    {
-      id: "prd-1003",
-      name: "Tailored Linen Trousers",
-      category: "Trousers",
-      price: 320,
-      stock: 7,
-      status: "Low Stock",
-      image: "https://images.unsplash.com/photo-1624378439575-d10cabcbc768?w=180&q=80",
-    },
-    {
-      id: "prd-1004",
-      name: "Cashmere Turtleneck",
-      category: "Knitwear",
-      price: 450,
-      stock: 24,
-      status: "Active",
-      image: "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=180&q=80",
-    },
-    {
-      id: "prd-1005",
-      name: "Leather Oxford Shoes",
-      category: "Shoes",
-      price: 510,
-      stock: 0,
-      status: "Out of Stock",
-      image: "https://images.unsplash.com/photo-1614252339475-533eea802cbb?w=180&q=80",
-    },
-    {
-      id: "prd-1006",
-      name: "Minimalist Chronograph",
-      category: "Accessories",
-      price: 280,
-      stock: 31,
-      status: "Draft",
-      image: "https://images.unsplash.com/photo-1524592094714-a57ee11b5ac8?w=180&q=80",
-    },
-    {
-      id: "prd-1007",
-      name: "Pleated Midi Dress",
-      category: "Dresses",
-      price: 295,
-      stock: 15,
-      status: "Active",
-      image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=180&q=80",
-    },
-    {
-      id: "prd-1008",
-      name: "Tailored Blazer",
-      category: "Blazers",
-      price: 420,
-      stock: 9,
-      status: "Low Stock",
-      image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=180&q=80",
-    },
-    {
-      id: "prd-1009",
-      name: "Classic Trench",
-      category: "Coats",
-      price: 580,
-      stock: 12,
-      status: "Active",
-      image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=180&q=80",
-    },
-    {
-      id: "prd-1010",
-      name: "Satin Skirt",
-      category: "Skirts",
-      price: 275,
-      stock: 27,
-      status: "Draft",
-      image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=180&q=80",
-    },
-    {
-      id: "prd-1011",
-      name: "Knit Day Dress",
-      category: "Dresses",
-      price: 310,
-      stock: 6,
-      status: "Low Stock",
-      image: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=180&q=80",
-    },
-    {
-      id: "prd-1012",
-      name: "Silk Evening Blouse",
-      category: "Shirts",
-      price: 189,
-      stock: 34,
-      status: "Active",
-      image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=180&q=80",
-    },
-  ];
+  let adminProductsList = [];
 
   const state = {
     search: "",
@@ -141,7 +32,7 @@
 
   const getFilteredProducts = () => {
     const query = state.search.trim().toLowerCase();
-    return ADMIN_PRODUCTS.filter((product) => {
+    return adminProductsList.filter((product) => {
       const matchesSearch = !query
         || product.name.toLowerCase().includes(query)
         || product.category.toLowerCase().includes(query);
@@ -160,9 +51,9 @@
   };
 
   const updateSummary = () => {
-    els.summaryTotal.textContent = ADMIN_PRODUCTS.length;
-    els.summaryActive.textContent = ADMIN_PRODUCTS.filter((product) => product.status === "Active").length;
-    els.summaryLow.textContent = ADMIN_PRODUCTS.filter((product) => product.status === "Low Stock").length;
+    els.summaryTotal.textContent = adminProductsList.length;
+    els.summaryActive.textContent = adminProductsList.filter((product) => product.status === "Active").length;
+    els.summaryLow.textContent = adminProductsList.filter((product) => product.status === "Low Stock").length;
   };
 
   const renderRows = (products) => {
@@ -219,6 +110,51 @@
     els.sidebarToggle.setAttribute("aria-expanded", String(isOpen));
   };
 
+  const fetchInventory = async () => {
+    try {
+      if (window.apiFetchProducts) {
+        const res = await window.apiFetchProducts();
+        const rawProducts = res.data || res;
+        
+        // Map raw DB products categories to UI subcategories
+        adminProductsList = rawProducts.map((p) => {
+          let subcat = "Shirts";
+          const nameLower = p.name.toLowerCase();
+          if (nameLower.includes("coat") || nameLower.includes("trench")) subcat = "Coats";
+          else if (nameLower.includes("shirt") || nameLower.includes("turtleneck") || nameLower.includes("sweater")) subcat = "Shirts";
+          else if (nameLower.includes("trouser")) subcat = "Trousers";
+          else if (nameLower.includes("shoes") || nameLower.includes("oxford")) subcat = "Shoes";
+          else if (nameLower.includes("chronograph") || nameLower.includes("watch")) subcat = "Accessories";
+          else if (nameLower.includes("dress")) subcat = "Dresses";
+          else if (nameLower.includes("blazer")) subcat = "Blazers";
+          else if (nameLower.includes("skirt")) subcat = "Skirts";
+          else if (nameLower.includes("turtleneck")) subcat = "Knitwear";
+
+          let status = "Active";
+          if (!p.isActive) status = "Draft";
+          else if (p.stock === 0) status = "Out of Stock";
+          else if (p.stock < 10) status = "Low Stock";
+
+          return {
+            id: p.id,
+            name: p.name,
+            category: subcat,
+            price: p.price,
+            stock: p.stock,
+            status: status,
+            image: p.images[0] || "https://images.unsplash.com/photo-1544441893-675973e31985?w=180&q=80"
+          };
+        });
+
+        updateSummary();
+        render();
+      }
+    } catch (err) {
+      console.error("Failed to load inventory:", err);
+      showToast("Failed to retrieve inventory.");
+    }
+  };
+
   const bindEvents = () => {
     els.search.addEventListener("input", (event) => {
       state.search = event.target.value;
@@ -253,7 +189,7 @@
       if (event.key === "Escape") setSidebarOpen(false);
     });
 
-    document.addEventListener("click", (event) => {
+    document.addEventListener("click", async (event) => {
       const actionButton = event.target.closest("[data-action]");
       if (!actionButton) return;
 
@@ -265,23 +201,32 @@
         return;
       }
 
-      const product = ADMIN_PRODUCTS.find((item) => item.id === productId);
+      const product = adminProductsList.find((item) => item.id === productId);
       if (!product) return;
 
       if (action === "edit") {
         openModal(product);
       } else if (action === "delete") {
         if (window.confirm(`Are you sure you want to delete "${product.name}"?`)) {
-          const idx = ADMIN_PRODUCTS.findIndex((item) => item.id === productId);
-          if (idx > -1) {
-            ADMIN_PRODUCTS.splice(idx, 1);
-            showToast("Product deleted successfully.");
-            updateSummary();
-            render();
+          try {
+            if (window.apiDeleteProduct) {
+              await window.apiDeleteProduct(productId);
+              showToast("Product deleted successfully.");
+              
+              const idx = adminProductsList.findIndex((item) => item.id === productId);
+              if (idx > -1) {
+                adminProductsList.splice(idx, 1);
+                updateSummary();
+                render();
+              }
+            }
+          } catch (err) {
+            console.error("Failed to delete product:", err);
+            window.showToast(err.message || "Failed to delete product.", "error");
           }
         }
       } else if (action === "view") {
-        showToast(`Locating details for ${product.name}...`);
+        showToast(`Details: ${product.name} | Price: $${product.price} | Stock: ${product.stock}`);
       }
     });
 
@@ -306,7 +251,7 @@
     els.closeModalBtn.addEventListener("click", closeModal);
     els.cancelModalBtn.addEventListener("click", closeModal);
 
-    els.productForm.addEventListener("submit", (e) => {
+    els.productForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const idInput = document.getElementById("modal-product-id").value;
       const name = document.getElementById("modal-product-name").value;
@@ -315,28 +260,62 @@
       const stock = Number(document.getElementById("modal-product-stock").value) || 0;
       const status = document.getElementById("modal-product-status").value;
 
-      if (idInput) {
-        const product = ADMIN_PRODUCTS.find((p) => p.id === idInput);
-        if (product) {
-          product.name = name;
-          product.category = category;
-          product.price = price;
-          product.stock = stock;
-          product.status = status;
-          showToast(`"${name}" updated successfully.`);
-        }
-      } else {
-        const newId = `prd-${1000 + ADMIN_PRODUCTS.length + 1}`;
-        ADMIN_PRODUCTS.unshift({
-          id: newId,
-          name, category, price, stock, status,
-          image: "https://images.unsplash.com/photo-1544441893-675973e31985?w=180&q=80"
-        });
-        showToast(`"${name}" fully listed!`);
+      // Map subcategory to main Category enum
+      let dbCategory = "MEN";
+      if (category === "Accessories") {
+        dbCategory = "ACCESSORIES";
       }
-      closeModal();
-      updateSummary();
-      render();
+
+      const productPayload = {
+        name,
+        description: `Premium ${category.toLowerCase()} selection.`,
+        price,
+        stock,
+        category: dbCategory,
+        images: ["https://images.unsplash.com/photo-1544441893-675973e31985?w=600&q=80"],
+        isActive: status !== "Draft"
+      };
+
+      try {
+        if (idInput) {
+          if (window.apiUpdateProduct) {
+            const res = await window.apiUpdateProduct(idInput, productPayload);
+            const p = res.data;
+
+            const product = adminProductsList.find((item) => item.id === idInput);
+            if (product) {
+              product.name = p.name;
+              product.category = category; // keep subcategory
+              product.price = p.price;
+              product.stock = p.stock;
+              product.status = status;
+              showToast(`"${name}" updated successfully.`);
+            }
+          }
+        } else {
+          if (window.apiCreateProduct) {
+            const res = await window.apiCreateProduct(productPayload);
+            const p = res.data;
+
+            adminProductsList.unshift({
+              id: p.id,
+              name: p.name,
+              category: category,
+              price: p.price,
+              stock: p.stock,
+              status: status,
+              image: p.images[0] || "https://images.unsplash.com/photo-1544441893-675973e31985?w=180&q=80"
+            });
+            showToast(`"${name}" fully listed!`);
+          }
+        }
+        closeModal();
+        updateSummary();
+        render();
+      } catch (err) {
+        console.error("Failed to save product:", err);
+        window.showToast(err.message || "Failed to save product.", "error");
+      }
     });
   };
 
@@ -364,10 +343,32 @@
     els.cancelModalBtn = document.getElementById("cancel-modal-btn");
   };
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     cacheElements();
-    updateSummary();
-    bindEvents();
-    render();
+    
+    // Security check: Verify user authentication and ADMIN role
+    try {
+      if (window.apiGetProfile) {
+        const res = await window.apiGetProfile();
+        if (res && res.success && res.data && res.data.role === 'ADMIN') {
+          // Authorized Admin
+          document.querySelector(".admin-profile__avatar").textContent = res.data.name ? res.data.name.substring(0, 2).toUpperCase() : "AD";
+          document.querySelector(".admin-profile p").textContent = res.data.name || "Admin";
+          
+          bindEvents();
+          await fetchInventory();
+        } else {
+          window.showToastNextPage("Access Denied: Admin privileges required.", "error");
+          window.location.href = "/pages/index.html";
+        }
+      } else {
+        window.showToastNextPage("Authentication API wrapper missing.", "error");
+        window.location.href = "/pages/index.html";
+      }
+    } catch (err) {
+      console.error("Access check failed:", err);
+      window.showToastNextPage("Access Denied: Please sign in as an Administrator.", "error");
+      window.location.href = "/pages/auth.html";
+    }
   });
 })();

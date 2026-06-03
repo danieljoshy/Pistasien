@@ -8,7 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const tabMeta = {
     login:  { title: "Sign In",        switchHtml: 'Don\'t have an account? <a href="#" class="auth-switch-link" data-tab="signup">Sign Up</a>' },
-    signup: { title: "Create Account", switchHtml: 'Already have an account? <a href="#" class="auth-switch-link" data-tab="login">Sign In</a>'  }
+    signup: { title: "Create Account", switchHtml: 'Already have an account? <a href="#" class="auth-switch-link" data-tab="login">Sign In</a>'  },
+    otp:    { title: "Verify Email",   switchHtml: 'Want to go back? <a href="#" class="auth-switch-link" data-tab="login">Sign In</a>' }
   };
 
   /* ── ENTRANCE ANIMATION ──────────────────────────────── */
@@ -78,6 +79,12 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ── TAB SWITCH ──────────────────────────────────────── */
   function switchTab(targetId) {
     if (!tabMeta[targetId]) return;
+
+    /* Hide/show tab header in OTP mode */
+    const authTabs = document.querySelector(".auth-tabs");
+    if (authTabs) {
+      authTabs.style.display = targetId === "otp" ? "none" : "flex";
+    }
 
     /* Update tab buttons */
     tabs.forEach(t => {
@@ -209,15 +216,25 @@ document.addEventListener("DOMContentLoaded", () => {
         if (window.apiLogin) {
           const result = await window.apiLogin(email, password);
           console.log("Login success:", result);
-          alert("Login successful!");
+          // Redirect immediately to /pages/index.html with no alert popup
+          window.location.href = "/pages/index.html";
         } else {
           // Fallback if api.js isn't loaded
           console.log("Mock login for:", email);
-          setTimeout(() => alert("Mock Login complete"), 500);
+          setTimeout(() => {
+            window.showToast("Mock Login complete", "success");
+          }, 500);
         }
       } catch (err) {
         console.error("Login failed:", err);
-        alert("Login failed. Please try again.");
+        if (err.status === 403 && err.data && err.data.userId) {
+          // Email is not verified. Redirect to OTP verification screen.
+          document.getElementById("otp-userid").value = err.data.userId;
+          switchTab("otp");
+          window.showToast("Please verify your email address. An OTP code has been sent to your email.", "warning");
+        } else {
+          window.showToast(err.message || "Login failed. Please check your credentials.", "error");
+        }
       } finally {
         btnTextNode.textContent = originalText;
         btn.disabled = false;
@@ -245,17 +262,88 @@ document.addEventListener("DOMContentLoaded", () => {
         if (window.apiSignup) {
           const result = await window.apiSignup(data);
           console.log("Signup success:", result);
-          alert("Signup successful!");
+          if (result.userId) {
+            document.getElementById("otp-userid").value = result.userId;
+            switchTab("otp");
+            window.showToast("Account created successfully! Please enter the 6-digit OTP sent to your email to verify.", "success");
+          } else {
+            window.showToast("Registration successful. Please log in.", "success");
+            switchTab("login");
+          }
         } else {
           console.log("Mock signup for:", email);
-          setTimeout(() => alert("Mock Signup complete"), 500);
+          setTimeout(() => {
+            window.showToast("Mock Signup complete", "success");
+          }, 500);
         }
       } catch (err) {
         console.error("Signup failed:", err);
-        alert("Signup failed. Please try again.");
+        window.showToast(err.message || "Signup failed. Please try again.", "error");
       } finally {
         btnTextNode.textContent = originalText;
         btn.disabled = false;
+      }
+    });
+  }
+
+  const otpForm = document.getElementById("pane-otp");
+  if (otpForm) {
+    otpForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = otpForm.querySelector(".auth-btn-primary");
+      const btnTextNode = btn.querySelector(".btn-text") || btn;
+      const originalText = btnTextNode.textContent;
+      btnTextNode.textContent = "Verifying...";
+      btn.disabled = true;
+
+      const userId = document.getElementById("otp-userid").value;
+      const otp = document.getElementById("verification-otp").value;
+
+      try {
+        if (window.apiVerifyEmail) {
+          const result = await window.apiVerifyEmail(userId, otp);
+          console.log("OTP Verification success:", result);
+          // Redirect immediately to login page with no alert popup
+          window.location.href = "/pages/auth.html";
+        } else {
+          window.showToast("apiVerifyEmail utility is missing.", "error");
+        }
+      } catch (err) {
+        console.error("OTP Verification failed:", err);
+        window.showToast(err.message || "Verification failed. Please check the code.", "error");
+      } finally {
+        btnTextNode.textContent = originalText;
+        btn.disabled = false;
+      }
+    });
+  }
+
+  const resendBtn = document.getElementById("resend-otp-btn");
+  if (resendBtn) {
+    resendBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const userId = document.getElementById("otp-userid").value;
+      if (!userId) {
+        window.showToast("User session not found. Please try logging in again.", "warning");
+        return;
+      }
+
+      resendBtn.style.pointerEvents = "none";
+      resendBtn.style.opacity = "0.5";
+      resendBtn.textContent = "Sending...";
+
+      try {
+        if (window.apiResendOTP) {
+          await window.apiResendOTP(userId);
+          window.showToast("A new verification code has been sent to your email.", "success");
+        }
+      } catch (err) {
+        console.error("Resending OTP failed:", err);
+        window.showToast(err.message || "Failed to resend code.", "error");
+      } finally {
+        resendBtn.style.pointerEvents = "auto";
+        resendBtn.style.opacity = "1";
+        resendBtn.textContent = "Resend Code";
       }
     });
   }

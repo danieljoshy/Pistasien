@@ -64,4 +64,83 @@ router.delete('/', async (req: AuthRequest, res: Response) => {
   res.json({ success: true, message: 'Cart cleared.' });
 });
 
+// POST /api/cart/sync — sync cart with frontend state
+router.post('/sync', async (req: AuthRequest, res: Response) => {
+  const { items } = req.body;
+
+  if (!Array.isArray(items)) {
+    return res.status(400).json({ success: false, message: 'Invalid payload: items must be an array.' });
+  }
+
+  // Validate items format
+  for (const item of items) {
+    if (typeof item.id !== 'string' || !item.id.trim()) {
+      return res.status(400).json({ success: false, message: 'Invalid item: id is required and must be a string.' });
+    }
+    const qty = Number(item.qty);
+    if (!Number.isInteger(qty) || qty < 1) {
+      return res.status(400).json({ success: false, message: `Invalid item quantity for product ${item.id}: qty must be at least 1.` });
+    }
+  }
+
+  try {
+    // Validate if products exist in database
+    const productIds = items.map((item: any) => item.id);
+    const existingProducts = await prisma.product.findMany({
+      where: { id: { in: productIds } },
+      select: { id: true }
+    });
+    const existingProductIds = new Set(existingProducts.map(p => p.id));
+
+    for (const item of items) {
+      if (!existingProductIds.has(item.id)) {
+        return res.status(400).json({ success: false, message: `Product not found: Product with ID ${item.id} does not exist.` });
+      }
+    }
+
+    // Run transaction
+    const result = await prisma.$transaction(async (tx) => {
+      // 1. Get or create user cart
+      const cart = await tx.cart.upsert({
+        where: { userId: req.user!.id },
+        create: { userId: req.user!.id },
+        update: {},
+      });
+
+      // 2. Delete all current items in the cart
+      await tx.cartItem.deleteMany({
+        where: { cartId: cart.id },
+      });
+
+      // 3. Insert new items
+      if (items.length > 0) {
+        await tx.cartItem.createMany({
+          data: items.map((item: any) => ({
+            cartId: cart.id,
+            productId: item.id,
+            quantity: Number(item.qty),
+            size: item.variant || 'Standard',
+          })),
+        });
+      }
+
+      // 4. Retrieve updated cart with items and products
+      return tx.cart.findUnique({
+        where: { id: cart.id },
+        include: {
+          items: {
+            include: {
+              product: true,
+            },
+          },
+        },
+      });
+    });
+
+    res.json({ success: true, message: 'Cart synced successfully.', data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to sync cart.', error: (error as Error).message });
+  }
+});
+
 export default router;

@@ -5,56 +5,459 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Checkout - Pistasien Clothing</title>
-  <meta name="description" content="Complete your Pistasien checkout." />
+  <meta name="description" content="Secure checkout for your Pistasien clothing purchase." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css?v=8" />
   <link rel="icon" type="image/png" sizes="64x64" href="../assets/images/logo2.png">
+
+  <style>
+    .checkout-section {
+      min-height: 80vh;
+      padding-top: 140px;
+      padding-bottom: 100px;
+    }
+
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+
+    @media (max-width: 992px) {
+      .checkout-layout {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    .checkout-card {
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(26, 26, 20, 0.08);
+      border-radius: 16px;
+      padding: 2.5rem;
+    }
+
+    .checkout-group-title {
+      font-family: var(--font-head);
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid rgba(26, 26, 20, 0.1);
+      padding-bottom: 0.5rem;
+      color: var(--ink);
+    }
+
+    .checkout-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .checkout-form-grid .full-width {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 600px) {
+      .checkout-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .checkout-form-grid .full-width {
+        grid-column: span 1;
+      }
+    }
+
+    .checkout-input-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .checkout-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      color: rgba(26, 26, 20, 0.6);
+    }
+
+    .checkout-input {
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(26, 26, 20, 0.18);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--ink);
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .checkout-input:focus {
+      outline: none;
+      border-color: var(--pistachio);
+      box-shadow: 0 0 0 3px rgba(122, 158, 78, 0.12);
+    }
+
+    .checkout-payment-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .checkout-payment-option {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(26, 26, 20, 0.12);
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.4);
+      transition: all 0.25s;
+    }
+
+    .checkout-payment-option.active {
+      border-color: var(--pistachio);
+      background: rgba(122, 158, 78, 0.05);
+      box-shadow: inset 0 0 0 1px var(--pistachio);
+    }
+
+    .checkout-payment-radio {
+      accent-color: var(--pistachio);
+    }
+
+    .checkout-payment-text {
+      font-size: 0.86rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .checkout-summary-card {
+      background: rgba(26, 26, 20, 0.03);
+      border: 1px solid rgba(26, 26, 20, 0.08);
+      border-radius: 16px;
+      padding: 2.2rem;
+      position: sticky;
+      top: 120px;
+    }
+
+    .checkout-summary-title {
+      font-family: var(--font-head);
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(26, 26, 20, 0.1);
+      padding-bottom: 0.8rem;
+    }
+
+    .checkout-items-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(26, 26, 20, 0.08);
+      padding-bottom: 1rem;
+    }
+
+    .checkout-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+      font-size: 0.85rem;
+    }
+
+    .checkout-item-details {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    .checkout-item-img {
+      width: 40px;
+      height: 50px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid rgba(26, 26, 20, 0.08);
+    }
+
+    .checkout-item-name-qty {
+      font-weight: 500;
+    }
+
+    .checkout-item-variant {
+      font-size: 0.7rem;
+      color: rgba(26, 26, 20, 0.5);
+    }
+
+    .checkout-summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: rgba(26, 26, 20, 0.7);
+    }
+
+    .checkout-summary-row.total {
+      border-top: 1px solid rgba(26, 26, 20, 0.1);
+      padding-top: 1.2rem;
+      margin-top: 1.2rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .checkout-summary-row.total strong {
+      font-family: var(--font-head);
+      font-size: 1.35rem;
+      color: var(--pistachio);
+    }
+
+    .checkout-submit-btn {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+      display: inline-block;
+      transition: all 0.3s ease;
+      margin-top: 1.5rem;
+      cursor: pointer;
+      background: var(--pistachio);
+      color: #fff;
+      border: 1px solid var(--pistachio);
+      box-shadow: 0 8px 24px rgba(122, 158, 78, 0.22);
+    }
+
+    .checkout-submit-btn:hover:not(:disabled) {
+      filter: brightness(1.06);
+      transform: translateY(-2px);
+    }
+
+    .checkout-submit-btn:disabled {
+      background: var(--warm-gray);
+      border-color: var(--warm-gray);
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .checkout-back-link {
+      display: block;
+      text-align: center;
+      font-size: 0.8rem;
+      color: rgba(26, 26, 20, 0.5);
+      text-decoration: underline;
+      margin-top: 0.8rem;
+    }
+
+    .checkout-back-link:hover {
+      color: var(--ink);
+    }
+  </style>
 </head>
+<body>
 
-<body class="storefront-page">
-  <div id="loader"><svg style="display:none;"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" /></filter></svg><div class="loader-noise"></div><div class="loader-glow"></div><div class="loader-inner"><div class="loader-brand" id="loader-brand">PISTASIEN</div><div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div><p class="loader-text" id="loader-text">Preparing Checkout...</p></div></div>
+  <!-- LOADER -->
+  <div id="loader">
+    <svg style="display:none;">
+      <filter id="noiseFilter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
+      </filter>
+    </svg>
+    <div class="loader-noise"></div>
+    <div class="loader-glow"></div>
+    <div class="loader-inner">
+      <div class="loader-brand" id="loader-brand">PISTASIEN</div>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar" id="loader-bar"></div>
+      </div>
+      <p class="loader-text" id="loader-text">Securing Connection...</p>
+    </div>
+  </div>
+
   <div id="page-overlay"></div>
-  <nav id="navbar"><div class="nav-left-cluster" style="display:flex;align-items:center;gap:1.5rem;"><button class="nav-icon-btn" id="nav-flowing-btn" aria-label="Open Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M3 6h18M3 18h18" /></svg></button><a href="/" class="nav-logo" id="nav-logo-link"><img src="../assets/images/logo.png" alt="Pistasien" class="nav-logo-img" /></a></div><ul class="nav-links"><li><a href="/#collections">Collections</a></li><li><a href="/mens">Men</a></li><li><a href="/profile">Profile</a></li><li><a href="/orders">Orders</a></li></ul><div class="nav-actions"><button class="nav-icon-btn" aria-label="Cart" id="btn-cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 01-8 0" /></svg><span class="cart-badge">0</span></button></div></nav>
 
-  <main>
-    <section class="sf-page-hero"><div class="container"><p class="section-eyebrow">Secure Checkout</p><h1 class="section-title">Complete Your Order</h1></div></section>
-    <section class="sf-checkout-layout container">
-      <form class="sf-form-panel reveal-section" id="checkout-form">
-        <div class="sf-form-grid">
-          <label>Full Name<input name="name" required autocomplete="name" /></label>
-          <label>Email<input name="email" type="email" required autocomplete="email" /></label>
-          <label>Phone<input name="phone" autocomplete="tel" /></label>
-          <label>Country<input name="country" required autocomplete="country-name" /></label>
-          <label class="sf-span-2">Address<input name="address" required autocomplete="street-address" /></label>
-          <label>City<input name="city" required autocomplete="address-level2" /></label>
-          <label>Zip Code<input name="zipCode" required autocomplete="postal-code" /></label>
+  <!-- NAVBAR -->
+  <nav id="navbar" class="scrolled">
+    <div class="nav-left-cluster" style="display: flex; align-items: center; gap: 1.5rem;">
+      <button class="nav-icon-btn" id="nav-flowing-btn" aria-label="Open Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 12h18M3 6h18M3 18h18" />
+        </svg>
+      </button>
+      <a href="index.html" class="nav-logo" id="nav-logo-link">
+        <img src="../assets/images/logo.png" alt="Pistasien" class="nav-logo-img" />
+      </a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/#collections">Collections</a></li>
+      <li><a href="mens.html">Men</a></li>
+      <li><a href="/#featured">Featured</a></li>
+      <li><a href="/#products">Shop</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-icon-btn" aria-label="Search" id="btn-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35" />
+        </svg>
+      </button>
+      <button class="nav-icon-btn" aria-label="Cart" id="btn-cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 01-8 0" />
+        </svg>
+        <span class="cart-badge">0</span>
+      </button>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+      <span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="checkout-section">
+    <div class="container">
+      <div class="section-header reveal-section">
+        <p class="section-eyebrow">Checkout Process</p>
+        <h1 class="section-title" style="font-family: var(--font-head); font-size: clamp(2.4rem, 5vw, 3rem);">Billing & Delivery</h1>
+      </div>
+
+      <div class="checkout-layout">
+        <!-- Forms (Left) -->
+        <form id="checkout-form" class="checkout-card" novalidate>
+          
+          <!-- Shipping Contact -->
+          <h2 class="checkout-group-title">Contact Information</h2>
+          <div class="checkout-form-grid">
+            <div class="checkout-input-wrap">
+              <label class="checkout-label" for="checkout-name">Full Name</label>
+              <input type="text" id="checkout-name" class="checkout-input" placeholder="e.g. John Doe" required />
+            </div>
+            <div class="checkout-input-wrap">
+              <label class="checkout-label" for="checkout-phone">Phone Number</label>
+              <input type="tel" id="checkout-phone" class="checkout-input" placeholder="e.g. +1 555 123 4567" required />
+            </div>
+            <div class="checkout-input-wrap full-width">
+              <label class="checkout-label" for="checkout-email">Email Address</label>
+              <input type="email" id="checkout-email" class="checkout-input" placeholder="e.g. john@example.com" required />
+            </div>
+          </div>
+
+          <!-- Shipping Details -->
+          <h2 class="checkout-group-title">Shipping Address</h2>
+          <div class="checkout-form-grid">
+            <div class="checkout-input-wrap full-width">
+              <label class="checkout-label" for="checkout-address">Street Address</label>
+              <input type="text" id="checkout-address" class="checkout-input" placeholder="e.g. 123 Main St, Apt 4" required />
+            </div>
+            <div class="checkout-input-wrap">
+              <label class="checkout-label" for="checkout-city">City</label>
+              <input type="text" id="checkout-city" class="checkout-input" placeholder="e.g. Springfield" required />
+            </div>
+            <div class="checkout-input-wrap">
+              <label class="checkout-label" for="checkout-zip">ZIP / Postal Code</label>
+              <input type="text" id="checkout-zip" class="checkout-input" placeholder="e.g. 62701" required />
+            </div>
+            <div class="checkout-input-wrap full-width">
+              <label class="checkout-label" for="checkout-country">Country</label>
+              <input type="text" id="checkout-country" class="checkout-input" placeholder="e.g. United States" required />
+            </div>
+          </div>
+
+          <!-- Mock Payment Method -->
+          <h2 class="checkout-group-title">Payment Method</h2>
+          <div class="checkout-payment-options">
+            <div class="checkout-payment-option active" data-pm="card">
+              <input type="radio" name="payment_method" class="checkout-payment-radio" checked id="pm-card" />
+              <label for="pm-card" class="checkout-payment-text">Credit / Debit Card</label>
+            </div>
+            <div class="checkout-payment-option" data-pm="paypal">
+              <input type="radio" name="payment_method" class="checkout-payment-radio" id="pm-paypal" />
+              <label for="pm-paypal" class="checkout-payment-text">PayPal</label>
+            </div>
+          </div>
+
+        </form>
+
+        <!-- Summary (Right) -->
+        <div class="checkout-summary-card">
+          <h2 class="checkout-summary-title">Order Details</h2>
+          
+          <!-- Items List -->
+          <div class="checkout-items-list" id="checkout-items-summary">
+            <!-- Dynamic checkout items injected here -->
+          </div>
+
+          <div class="checkout-summary-row">
+            <span>Subtotal</span>
+            <span id="checkout-subtotal">$0.00</span>
+          </div>
+          <div class="checkout-summary-row">
+            <span>Shipping</span>
+            <span id="checkout-shipping">Free</span>
+          </div>
+          <div class="checkout-summary-row">
+            <span>Estimated Taxes</span>
+            <span id="checkout-tax">$0.00</span>
+          </div>
+          <div class="checkout-summary-row total">
+            <span>Total Amount</span>
+            <strong id="checkout-total">$0.00</strong>
+          </div>
+          
+          <button type="submit" form="checkout-form" id="checkout-submit-btn" class="checkout-submit-btn" disabled>Place Secure Order</button>
+          <a href="cart.html" class="checkout-back-link">Return to Cart</a>
         </div>
-        <div class="sf-payment-note">
-          <p class="section-eyebrow">Payment</p>
-          <p>This static checkout creates a local mock order. Payment integration can be added later without changing the page structure.</p>
-        </div>
-        <button type="submit" class="btn-primary">Place Order</button>
-      </form>
-      <aside class="sf-summary-panel reveal-section">
-        <p class="section-eyebrow">Order Summary</p>
-        <ul id="checkout-items" class="sf-summary-list"></ul>
-        <div id="checkout-totals" class="sf-totals"></div>
-        <div id="checkout-success" class="sf-success" hidden>
-          <strong>Order confirmed.</strong>
-          <span>Reference <b data-order-id></b></span>
-          <a href="/orders">View Orders</a>
-        </div>
-      </aside>
-    </section>
+      </div>
+
+    </div>
   </main>
 
-  <footer class="site-footer" id="site-footer"><div class="footer-divider"></div><div class="footer-grid-wrap"><div class="container footer-grid"><div class="footer-col" data-footer-col><p class="footer-col-heading">Contact</p><ul class="footer-col-list"><li><a href="#" class="footer-link">About Us</a></li><li><a href="#" class="footer-link">Contact Us</a></li></ul></div><div class="footer-col" data-footer-col><p class="footer-col-heading">Account</p><ul class="footer-col-list"><li><a href="/profile" class="footer-link">Profile</a></li><li><a href="/orders" class="footer-link">Orders</a></li></ul></div><div class="footer-col" data-footer-col><p class="footer-col-heading">Collections</p><ul class="footer-col-list"><li><a href="/mens" class="footer-link">Men</a></li><li><a href="/" class="footer-link">Home</a></li></ul></div></div></div><div class="footer-wordmark-wrap" data-footer-wordmark><span class="footer-wordmark">PISTASIEN</span></div><div class="footer-legal"><span class="footer-legal-copy">&copy; 2026 PISTASIEN</span></div></footer>
-  <div id="cart-root" aria-live="polite" aria-hidden="true"><div class="cart-overlay" data-cart-close></div><aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title"><header class="cart-header"><h2 id="cart-title">Your Cart</h2><button type="button" class="cart-close-btn" data-cart-close aria-label="Close cart">&times;</button></header><div class="cart-body" data-lenis-prevent><ul id="cart-items" class="cart-items"></ul><p class="cart-empty">Your cart is empty.</p></div><footer class="cart-footer"><div class="cart-subtotal-row"><span>Grand Total</span><strong data-cart-subtotal>$0.00</strong></div><a href="/checkout" class="cart-btn cart-btn-secondary">Review Checkout</a><button type="button" class="cart-btn cart-btn-ghost" data-cart-close>Continue Shopping</button><a href="/checkout" class="cart-btn cart-btn-primary">Proceed to Checkout</a></footer></aside></div>
-  <div id="flowing-menu-overlay" class="flowing-menu-wrap"><button id="close-flowing-menu" class="nav-icon-btn" style="position:absolute;top:1.5rem;right:2.5rem;z-index:10000;color:var(--cream);" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12" /></svg></button><nav class="flowing-menu"><div class="flowing-menu__item" data-text="Home" data-image="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&q=80"><a class="flowing-menu__item-link" href="/">Home</a></div><div class="flowing-menu__item" data-text="Shop" data-image="https://images.unsplash.com/photo-1544441893-675973e31985?w=600&q=80"><a class="flowing-menu__item-link" href="/mens">Shop</a></div><div class="flowing-menu__item" data-text="Profile" data-image="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80"><a class="flowing-menu__item-link" href="/profile">Profile</a></div><div class="flowing-menu__item" data-text="Orders" data-image="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80"><a class="flowing-menu__item-link" href="/orders">Orders</a></div></nav></div>
-  <div id="cur"></div><div id="cur-ring"></div>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lenis@1.1.5/dist/lenis.min.js"></script><script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script><script src="../js/api.js"></script><script src="../js/storefront.js?v=1"></script><script src="../js/main.js?v=8"></script>
-</body>
+  <!-- CART DRAWER -->
+  <div id="cart-root" aria-live="polite" aria-hidden="true">
+    <div class="cart-overlay" data-cart-close></div>
+    <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+      <header class="cart-header">
+        <h2 id="cart-title">Your Cart</h2>
+        <button type="button" class="cart-close-btn" data-cart-close aria-label="Close cart">&times;</button>
+      </header>
+      <div class="cart-body" data-lenis-prevent>
+        <ul id="cart-items" class="cart-items"></ul>
+        <p class="cart-empty">Your cart is empty.</p>
+      </div>
+      <footer class="cart-footer">
+        <div class="cart-subtotal-row">
+          <span>Grand Total</span>
+          <strong data-cart-subtotal>$0.00</strong>
+        </div>
+        <a href="cart.html" class="cart-btn cart-btn-secondary">View Full Cart</a>
+        <button type="button" class="cart-btn cart-btn-ghost" data-cart-close>Continue Shopping</button>
+        <a href="checkout.html" class="cart-btn cart-btn-primary">Proceed to Checkout</a>
+      </footer>
+    </aside>
+  </div>
 
+  <!-- CUSTOM CURSOR -->
+  <div id="cur"></div>
+  <div id="cur-ring"></div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.5/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/main.js?v=8"></script>
+  <script src="../js/checkout.js?v=8"></script>
+</body>
 </html>
