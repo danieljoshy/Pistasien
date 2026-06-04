@@ -11,6 +11,17 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Run transporter verification on startup if credentials are set
+if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+  transporter.verify((error) => {
+    if (error) {
+      logger.error(`⚠️ SMTP Transporter verification failed: ${error.message}`);
+    } else {
+      logger.info('📧 SMTP Transporter verified successfully and is ready to send emails.');
+    }
+  });
+}
+
 export const sendEmail = async ({
   to,
   subject,
