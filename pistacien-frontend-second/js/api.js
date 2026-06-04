@@ -466,3 +466,119 @@ window.apiDeleteProduct = async function(productId) {
   }
   return data;
 };
+
+window.apiUploadImage = async function(file) {
+  console.log(`[API] uploading image file: ${file.name}...`);
+  
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const res = await fetch(`${API_BASE_URL}/admin/upload`, {
+    method: 'POST',
+    body: formData,
+    credentials: 'include'
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    const err = new Error(data.message || 'Image upload failed');
+    err.status = res.status;
+    err.data = data;
+    throw err;
+  }
+  return data;
+};
+
+window.apiAdminGetOrders = async function() {
+  console.log(`[API] admin fetching all orders...`);
+  if (USE_MOCK) return { success: true, data: [] };
+
+  const res = await fetch(`${API_BASE_URL}/admin/orders`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include'
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    const err = new Error(data.message || 'Fetching orders failed');
+    err.status = res.status;
+    err.data = data;
+    throw err;
+  }
+  return data;
+};
+
+window.apiAdminGetOrderById = async function(orderId) {
+  console.log(`[API] admin fetching order details for ${orderId}...`);
+  if (USE_MOCK) return { success: true, data: null };
+
+  const res = await fetch(`${API_BASE_URL}/admin/orders/${orderId}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include'
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    const err = new Error(data.message || 'Fetching order details failed');
+    err.status = res.status;
+    err.data = data;
+    throw err;
+  }
+  return data;
+};
+
+window.apiAdminUpdateOrderStatus = async function(orderId, status, note) {
+  console.log(`[API] admin updating order ${orderId} to status ${status}...`);
+  if (USE_MOCK) return { success: true };
+
+  const res = await fetch(`${API_BASE_URL}/admin/orders/${orderId}/status`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status, note }),
+    credentials: 'include'
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    const err = new Error(data.message || 'Updating order status failed');
+    err.status = res.status;
+    err.data = data;
+    throw err;
+  }
+  return data;
+};
+
+window.apiGetAnalytics = async function() {
+  console.log(`[API] admin fetching analytics...`);
+  if (USE_MOCK) {
+    return {
+      success: true,
+      data: {
+        totalProducts: 0,
+        totalUsers: 0,
+        totalOrders: 0,
+        totalRevenue: 0,
+        lowStockAlerts: [],
+        recentOrders: []
+      }
+    };
+  }
+
+  const res = await fetch(`${API_BASE_URL}/admin/analytics`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include'
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    const err = new Error(data.message || 'Fetching analytics failed');
+    err.status = res.status;
+    err.data = data;
+    throw err;
+  }
+  return data;
+};
+

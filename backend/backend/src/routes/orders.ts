@@ -53,8 +53,14 @@ router.post('/', async (req: AuthRequest, res: Response) => {
           size: item.size,
         })),
       },
+      statusHistory: {
+        create: {
+          status: 'PENDING',
+          note: 'Order placed by customer.',
+        },
+      },
     },
-    include: { items: true },
+    include: { items: true, statusHistory: true },
   });
 
   // Clear cart after order

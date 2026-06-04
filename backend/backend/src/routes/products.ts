@@ -47,10 +47,11 @@ router.patch('/:id', protect, adminOnly, async (req: Request, res: Response) => 
 
 // DELETE /api/products/:id — admin only
 router.delete('/:id', protect, adminOnly, async (req: Request, res: Response) => {
-  await prisma.product.delete({
-    where: { id: req.params.id }
+  await prisma.product.update({
+    where: { id: req.params.id },
+    data: { isActive: false }
   });
-  res.json({ success: true, message: 'Product deleted successfully.' });
+  res.json({ success: true, message: 'Product archived successfully.' });
 });
 
 export default router;
