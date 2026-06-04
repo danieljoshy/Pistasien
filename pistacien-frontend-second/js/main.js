@@ -1094,6 +1094,8 @@ if (window.apiFetchCart) {
   state.items = loadStoredCart();
   render();
 }
+}
+
 
 
   /* ─────────────────────────────────────────────────
