@@ -74,7 +74,7 @@
     // 1. Fetch products dynamically from the backend for the MEN category
     try {
       if (window.apiFetchProducts) {
-        const apiBase = 'http://localhost:5000/api';
+        const apiBase = window.API_BASE_URL || 'https://pistasien-backend.onrender.com/api';
         const res = await fetch(`${apiBase}/products?category=MEN`);
         if (res.ok) {
           const resData = await res.json();

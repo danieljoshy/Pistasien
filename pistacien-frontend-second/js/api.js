@@ -2,7 +2,16 @@
  * Frontend API Utility wrappers
  * Configured dynamically: point API_BASE_URL to your backend.
  */
-const API_BASE_URL = 'http://localhost:5000/api';
+const getApiBaseUrl = () => {
+  const localHosts = ['localhost', '127.0.0.1'];
+  if (localHosts.includes(window.location.hostname) || window.location.hostname.startsWith('192.168.')) {
+    return 'http://localhost:5000/api';
+  }
+  return 'https://pistasien-backend.onrender.com/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
+window.API_BASE_URL = API_BASE_URL; // Expose globally for other scripts
 const USE_MOCK = false; // Toggle this to false when connecting to the real backend
 
 // Global Premium Toast Notification System
