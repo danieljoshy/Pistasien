@@ -26,9 +26,19 @@
     const loaderTx = document.getElementById("loader-text");
 
     if (!loader || !brand) return;
+
+    /* ── SESSION GUARD: skip loader on repeat page visits ── */
+    if (sessionStorage.getItem('siteLoaded')) {
+      loader.style.display = "none";
+      document.body.style.overflow = "";
+      initHeroAnimation();
+      return;
+    }
+
     if (!hasGsap()) {
       loader.style.display = "none";
       document.body.style.overflow = "";
+      initHeroAnimation();
       return;
     }
 
@@ -46,6 +56,7 @@
 
     const tl = gsap.timeline({
       onComplete: () => {
+        sessionStorage.setItem('siteLoaded', 'true');
         loader.style.display = "none";
         document.body.style.overflow = "";
         initHeroAnimation();
