@@ -816,16 +816,16 @@
           showView("dashboard");
         } else {
           window.showToastNextPage("Access Denied: Admin privileges required.", "error");
-          window.location.href = "/pages/index.html";
+          window.location.href = "index.html";
         }
       } else {
         window.showToastNextPage("Authentication API wrapper missing.", "error");
-        window.location.href = "/pages/index.html";
+        window.location.href = "index.html";
       }
     } catch (err) {
       console.error("Access check failed:", err);
       window.showToastNextPage("Access Denied: Please sign in as an Administrator.", "error");
-      window.location.href = "/pages/auth.html";
+      window.location.href = "auth.html";
     }
   });
 })();

@@ -34,7 +34,7 @@
         setTimeout(() => {
           if (!window.CartStore || window.CartStore.items.length === 0) {
             window.showToast("Your cart is empty. Redirecting to shop...", "warning");
-            window.location.href = "/pages/mens.html";
+            window.location.href = "mens.html";
           }
         }, 1500);
         return;
@@ -120,7 +120,7 @@
           }
 
           // Redirect to profile to view order history
-          window.location.href = "/pages/profile.html";
+          window.location.href = "profile.html";
         } else {
           window.showToast("Order API helper is missing.", "error");
           submitBtn.disabled = false;

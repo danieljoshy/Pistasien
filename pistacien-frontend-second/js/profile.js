@@ -111,12 +111,12 @@
               }
               
               window.showToastNextPage("You have signed out successfully.", "info");
-              window.location.href = "/pages/index.html";
+              window.location.href = "index.html";
             }
           } catch (err) {
             console.error("Logout failed:", err);
             // Fallback clear
-            window.location.href = "/pages/index.html";
+            window.location.href = "index.html";
           }
         }
       });

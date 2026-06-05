@@ -216,8 +216,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (window.apiLogin) {
           const result = await window.apiLogin(email, password);
           console.log("Login success:", result);
-          // Redirect immediately to /pages/index.html with no alert popup
-          window.location.href = "/pages/index.html";
+          // Redirect immediately to index.html with no alert popup
+          window.location.href = "index.html";
         } else {
           // Fallback if api.js isn't loaded
           console.log("Mock login for:", email);
@@ -304,7 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const result = await window.apiVerifyEmail(userId, otp);
           console.log("OTP Verification success:", result);
           // Redirect immediately to login page with no alert popup
-          window.location.href = "/pages/auth.html";
+          window.location.href = "auth.html";
         } else {
           window.showToast("apiVerifyEmail utility is missing.", "error");
         }
