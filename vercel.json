@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/index.html",
+      "destination": "/pistacien-frontend-second/pages/index.html"
+    },
+    {
+      "source": "/pages/:path*",
+      "destination": "/pistacien-frontend-second/pages/:path*"
+    },
+    {
       "source": "/",
       "destination": "/pistacien-frontend-second/pages/index.html"
     },
